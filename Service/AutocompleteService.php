@@ -2,44 +2,47 @@
 
 namespace Tetranz\Select2EntityBundle\Service;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+/**
+ * Class AutocompleteService
+ */
 class AutocompleteService
 {
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @param FormFactoryInterface $formFactory
-     * @param ManagerRegistry      $doctrine
+     * @param ManagerRegistry $doctrine
      */
     public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $doctrine)
     {
         $this->formFactory = $formFactory;
-        $this->doctrine = $doctrine;
-    }   
+        $this->doctrine    = $doctrine;
+    }
 
     /**
-     * @param Request                  $request
+     * @param Request $request
      * @param string|FormTypeInterface $type
      *
      * @return array
      */
-    public function getAutocompleteResults(Request $request, $type)
+    public function getAutocompleteResults(Request $request, FormTypeInterface|string $type): array
     {
-        $form = $this->formFactory->create($type);
+        $form         = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
 
         /** @var EntityRepository $repo */
@@ -50,20 +53,18 @@ class AutocompleteService
         $countQB = $repo->createQueryBuilder('e');
         $countQB
             ->select($countQB->expr()->count('e'))
-            ->where('e.'.$fieldOptions['property'].' LIKE :term')
-            ->setParameter('term', '%' . $term . '%')
-        ;
+            ->where('e.' . $fieldOptions['property'] . ' LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
 
         $maxResults = $fieldOptions['page_limit'];
-        $offset = ($request->get('page', 1) - 1) * $maxResults;
+        $offset     = ($request->get('page', 1) - 1) * $maxResults;
 
         $resultQb = $repo->createQueryBuilder('e');
         $resultQb
-            ->where('e.'.$fieldOptions['property'].' LIKE :term')
+            ->where('e.' . $fieldOptions['property'] . ' LIKE :term')
             ->setParameter('term', '%' . $term . '%')
             ->setMaxResults($maxResults)
-            ->setFirstResult($offset)
-        ;
+            ->setFirstResult($offset);
 
         if (is_callable($fieldOptions['callback'])) {
             $cb = $fieldOptions['callback'];
@@ -72,14 +73,15 @@ class AutocompleteService
             $cb($resultQb, $request);
         }
 
-        $count = $countQB->getQuery()->getSingleScalarResult();
+        $count             = $countQB->getQuery()->getSingleScalarResult();
         $paginationResults = $resultQb->getQuery()->getResult();
 
+        /** @noinspection PhpArrayIndexImmediatelyRewrittenInspection */
         $result = ['results' => null, 'more' => $count > ($offset + $maxResults)];
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        $result['results'] = array_map(function ($item) use ($accessor, $fieldOptions) {
+        $result['results'] = array_map(static function ($item) use ($accessor, $fieldOptions) {
             return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['property'])];
         }, $paginationResults);
 
