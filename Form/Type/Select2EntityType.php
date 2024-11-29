@@ -38,16 +38,16 @@ class Select2EntityType extends AbstractType
     protected array $config;
 
     /**
-     * @param ManagerRegistry   $registry
-     * @param RouterInterface   $router
-     * @param array $config
+     * @param ManagerRegistry $registry
+     * @param RouterInterface $router
+     * @param array           $config
      */
     public function __construct(ManagerRegistry $registry, RouterInterface $router, array $config)
     {
         $this->registry = $registry;
-        $this->em = $registry->getManager();
-        $this->router = $router;
-        $this->config = $config;
+        $this->em       = $registry->getManager();
+        $this->router   = $router;
+        $this->config   = $config;
     }
 
     /**
@@ -69,8 +69,7 @@ class Select2EntityType extends AbstractType
                 throw new RuntimeException('The entity manager \'em\' must be an ObjectManager instance');
             }
             $this->em = $em;
-        }
-        else {
+        } else {
             $manager = $this->registry->getManagerForClass($options['class']);
             if ($manager instanceof ObjectManager) {
                 $this->em = $manager;
@@ -91,11 +90,10 @@ class Select2EntityType extends AbstractType
             if (!$transformer instanceof DataTransformerInterface) {
                 throw new RuntimeException(sprintf('The custom transformer %s must implement "Symfony\Component\Form\DataTransformerInterface"', get_class($transformer)));
             }
-
             // add the default data transformer
         } else {
             $newTagPrefix = $options['allow_add']['new_tag_prefix'] ?? $this->config['allow_add']['new_tag_prefix'];
-            $newTagText = $options['allow_add']['new_tag_text'] ?? $this->config['allow_add']['new_tag_text'];
+            $newTagText   = $options['allow_add']['new_tag_text'] ?? $this->config['allow_add']['new_tag_text'];
 
             $transformer = $options['multiple']
                 ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix, $newTagText)
@@ -113,7 +111,7 @@ class Select2EntityType extends AbstractType
         parent::finishView($view, $form, $options);
         // make variables available to the view
         $view->vars['remote_path'] = $options['remote_path']
-            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['page_limit' => $options['page_limit'] ]));
+            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['page_limit' => $options['page_limit']]));
 
         // merge variable names which are only set per instance with those from yml config
         $varNames = array_merge(['multiple', 'placeholder', 'primary_key', 'autostart', 'query_parameters'], array_keys($this->config));
@@ -126,7 +124,7 @@ class Select2EntityType extends AbstractType
 
             $reqParams = [];
             foreach ($options['req_params'] as $key => $reqParam) {
-                $reqParams[$key] = $accessor->getValue($view,  $reqParam . '.vars[full_name]');
+                $reqParams[$key] = $accessor->getValue($view, $reqParam . '.vars[full_name]');
             }
 
             $view->vars['attr']['data-req_params'] = json_encode($reqParams, JSON_THROW_ON_ERROR);
@@ -151,43 +149,43 @@ class Select2EntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-                'object_manager'   => null,
-                'class'            => null,
-                'data_class'       => null,
-                'primary_key'      => 'id',
-                'remote_path'      => null,
-                'remote_route'     => null,
-                'remote_params'    => [],
-                'multiple'         => false,
-                'compound'         => false,
-                'minimum_input_length' => $this->config['minimum_input_length'],
-                'page_limit'       => $this->config['page_limit'],
-                'scroll'           => $this->config['scroll'],
-                'allow_clear'      => $this->config['allow_clear'],
-                'allow_add'        => [
-                    'enabled'        => $this->config['allow_add']['enabled'],
-                    'new_tag_text'   => $this->config['allow_add']['new_tag_text'],
-                    'new_tag_prefix' => $this->config['allow_add']['new_tag_prefix'],
-                    'tag_separators' => $this->config['allow_add']['tag_separators'],
-                ],
-                'delay'            => $this->config['delay'],
-                'text_property'    => null,
-                'placeholder'      => false,
-                'language'         => $this->config['language'],
-                'theme'            => $this->config['theme'],
-                'required'         => false,
-                'cache'            => $this->config['cache'],
-                'cache_timeout'    => $this->config['cache_timeout'],
-                'transformer'      => null,
-                'autostart'        => true,
-                'width'            => $this->config['width'] ?? null,
-                'req_params'       => [],
-                'property'         => null,
-                'callback'         => null,
-                'class_type'       => null,
-                'query_parameters' => [],
-                'render_html'      => $this->config['render_html'] ?? false,
-            ]
+                                   'object_manager'       => null,
+                                   'class'                => null,
+                                   'data_class'           => null,
+                                   'primary_key'          => 'id',
+                                   'remote_path'          => null,
+                                   'remote_route'         => null,
+                                   'remote_params'        => [],
+                                   'multiple'             => false,
+                                   'compound'             => false,
+                                   'minimum_input_length' => $this->config['minimum_input_length'],
+                                   'page_limit'           => $this->config['page_limit'],
+                                   'scroll'               => $this->config['scroll'],
+                                   'allow_clear'          => $this->config['allow_clear'],
+                                   'allow_add'            => [
+                                       'enabled'        => $this->config['allow_add']['enabled'],
+                                       'new_tag_text'   => $this->config['allow_add']['new_tag_text'],
+                                       'new_tag_prefix' => $this->config['allow_add']['new_tag_prefix'],
+                                       'tag_separators' => $this->config['allow_add']['tag_separators'],
+                                   ],
+                                   'delay'                => $this->config['delay'],
+                                   'text_property'        => null,
+                                   'placeholder'          => false,
+                                   'language'             => $this->config['language'],
+                                   'theme'                => $this->config['theme'],
+                                   'required'             => false,
+                                   'cache'                => $this->config['cache'],
+                                   'cache_timeout'        => $this->config['cache_timeout'],
+                                   'transformer'          => null,
+                                   'autostart'            => true,
+                                   'width'                => $this->config['width'] ?? null,
+                                   'req_params'           => [],
+                                   'property'             => null,
+                                   'callback'             => null,
+                                   'class_type'           => null,
+                                   'query_parameters'     => [],
+                                   'render_html'          => $this->config['render_html'] ?? false,
+                               ],
         );
     }
 

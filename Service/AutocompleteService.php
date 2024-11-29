@@ -26,7 +26,7 @@ class AutocompleteService
 
     /**
      * @param FormFactoryInterface $formFactory
-     * @param ManagerRegistry $doctrine
+     * @param ManagerRegistry      $doctrine
      */
     public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $doctrine)
     {
@@ -35,7 +35,7 @@ class AutocompleteService
     }
 
     /**
-     * @param Request $request
+     * @param Request                  $request
      * @param string|FormTypeInterface $type
      *
      * @return array

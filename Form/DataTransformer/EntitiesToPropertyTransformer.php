@@ -40,11 +40,11 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
 
     /**
      * @param ObjectManager $em
-     * @param string $class
-     * @param null $textProperty
-     * @param string $primaryKey
-     * @param string $newTagPrefix
-     * @param string $newTagText
+     * @param string        $class
+     * @param null          $textProperty
+     * @param string        $primaryKey
+     * @param string        $newTagPrefix
+     * @param string        $newTagText
      */
     public function __construct(ObjectManager $em, string $class, $textProperty = null, string $primaryKey = 'id', string $newTagPrefix = '__', string $newTagText = ' (NEW)')
     {

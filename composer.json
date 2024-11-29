@@ -1,34 +1,41 @@
 {
-    "name": "tetranz/select2entity-bundle",
-    "type": "symfony-bundle",
-    "description": "A Symfony bundle that integrates Select2 as a drop-in replacement for a standard entity field on a Symfony form.",
-    "keywords": ["symfony","select2", "typeahead","autocomplete"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Ross Keatinge",
-            "email": "tetranz@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^8.3",
-        "doctrine/orm": "^3.1",
-        "twig/twig": "^3.10",
-        "symfony/property-access": "7.1.*",
-        "symfony/dependency-injection": "7.1.*",
-        "symfony/http-kernel": "7.1.*",
-        "symfony/form": "7.1.*",
-        "symfony/config": "7.1.*",
-        "symfony/routing": "7.1.*"
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-latest"
-    },
-    "autoload": {
-        "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
-    },
-    "extra": {
-        "branch-alias": {
-        }
+  "name": "tetranz/select2entity-bundle",
+  "type": "symfony-bundle",
+  "description": "A Symfony bundle that integrates Select2 as a drop-in replacement for a standard entity field on a Symfony form.",
+  "keywords": [
+    "symfony",
+    "select2",
+    "typeahead",
+    "autocomplete"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ross Keatinge",
+      "email": "tetranz@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^8.3",
+    "doctrine/orm": "^3.3",
+    "twig/twig": "^3.15",
+    "symfony/property-access": "7.2.*",
+    "symfony/dependency-injection": "7.2.*",
+    "symfony/http-kernel": "7.2.*",
+    "symfony/form": "7.2.*",
+    "symfony/config": "7.2.*",
+    "symfony/routing": "7.2.*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tetranz\\Select2EntityBundle\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+    }
+  }
 }
